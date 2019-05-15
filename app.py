@@ -20,7 +20,7 @@ RESPONSE_TEMPLATE = {
 }
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def hello():
     if request.method == 'POST':
         data = request.data
