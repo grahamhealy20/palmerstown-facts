@@ -1,28 +1,33 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 
+from scraper import get_random_fact
+
+URL = 'https://en.wikipedia.org/wiki/Palmerstown'
 app = Flask(__name__)
-
-RESPONSE_TEMPLATE = {
-    "payload": {
-        "google": {
-            "expectUserResponse": False,
-            "richResponse": {
-                "items": [
-                    {
-                        "simpleResponse": {
-                            "textToSpeech": "this is a simple response"
-                        }
-                    }
-                ]
-            }
-        }
-    }
-}
 
 
 @app.route("/", methods=['GET', 'POST'])
-def hello():
-    if request.method == 'POST':
-        data = request.data
+def factoid():
+    """
+    Fetch a fact about Palmerstown from the Wikipedia article specified in URL and return it as a Google
+    DialogFlow response.
 
-    return jsonify(RESPONSE_TEMPLATE)
+    :return: A JSON response of a google DiaglogFlow payload with the fact as the textToSpeech message.
+    """
+    response = {
+        "payload": {
+            "google": {
+                "expectUserResponse": False,
+                "richResponse": {
+                    "items": [
+                        {
+                            "simpleResponse": {
+                                "textToSpeech": get_random_fact(url=URL)
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+    return jsonify(response)
